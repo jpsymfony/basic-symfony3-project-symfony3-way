@@ -1,0 +1,17 @@
+services:
+    app.media_manager:
+        class: AppBundle\Entity\Manager\MediaManager
+        arguments: ["@app.media_repository", "@security.token_storage"]
+
+    app.vote_manager:
+        class: AppBundle\Entity\Manager\VoteManager
+        arguments: ["@app.vote_repository", "@security.token_storage"]
+
+    app.mailer_service:
+        class: AppBundle\Service\MailerService
+        arguments:
+            - "@mailer"
+
+    app.contact.manager:
+        class: AppBundle\Entity\Manager\ContactManager
+        arguments: ['@app.mailer_service', '@twig', '@translator','mail/contact_mail.html.twig', '%email_from%', '%mailer_user%']
