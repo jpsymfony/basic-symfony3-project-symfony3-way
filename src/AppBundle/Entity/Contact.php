@@ -255,7 +255,7 @@ class Contact
      */
     public function validate(ExecutionContextInterface $context)
     {
-        if ($this->getKnowledge() == 'autre' && $this->getOther() == null) {
+        if ('autre' === $this->getKnowledge() && null === $this->getOther()) {
             $context->buildViolation(
                 "Vous devez remplir ce champ si vous avez coché 'autre'"
             )
