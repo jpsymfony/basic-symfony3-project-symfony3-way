@@ -60,7 +60,7 @@ class User implements UserInterface
     private $salt;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\NotBlank()
      * @Assert\Regex(
      *      pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/",
      *      message="Use 1 upper case letter, 1 lower case letter, and 1 number"
