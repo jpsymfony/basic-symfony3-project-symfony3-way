@@ -42,6 +42,7 @@ class MediaManager
             }
         }
 
+
         return $this->mediaRepository->getRandomMedia();
     }
 

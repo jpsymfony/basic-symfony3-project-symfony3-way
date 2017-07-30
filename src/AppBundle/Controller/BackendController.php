@@ -15,6 +15,9 @@ class BackendController extends Controller
 {
     /**
      * @Route("/", name="backend_new_media")
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newMediaAction(Request $request)
     {
@@ -24,7 +27,7 @@ class BackendController extends Controller
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
-            if ($form->isValid())
+            if ($form->isSubmitted() && $form->isValid())
             {
                 $this->get('app.media_manager')->saveMedia($media);
                 $this->get('session')->getFlashBag()->add('success', 'Votre media est enregistré');

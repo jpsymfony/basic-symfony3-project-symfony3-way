@@ -12,6 +12,8 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 /**
  * Controller used to manage the application security.
@@ -23,30 +25,18 @@ class SecurityController extends Controller
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction()
+    public function loginAction(AuthenticationUtils $authUtils)
     {
-        $helper = $this->get('security.authentication_utils');
+        // get the login error if there is one
+        $error = $authUtils->getLastAuthenticationError();
 
-        return $this->render('security/login.html.twig',
-                array(
-                // last username entered by the user (if any)
-                'last_username' => $helper->getLastUsername(),
-                // last authentication error (if any)
-                'error' => $helper->getLastAuthenticationError(),
+        // last username entered by the user
+        $lastUsername = $authUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', array(
+            'last_username' => $lastUsername,
+            'error'         => $error,
         ));
-    }
-
-    /**
-     * This is the route the login form submits to.
-     *
-     * But, this will never be executed. Symfony will intercept this first
-     * and handle the login automatically. See form_login in app/config/security.yml
-     *
-     * @Route("/login_check", name="security_login_check")
-     */
-    public function loginCheckAction()
-    {
-        throw new \Exception('This should never be reached!');
     }
 
     /**

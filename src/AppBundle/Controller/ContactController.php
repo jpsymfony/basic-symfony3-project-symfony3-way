@@ -20,7 +20,7 @@ class ContactController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->get('app.contact.manager')->sendMail($form->getData());
             $this->addFlash('success', 'Merci pour votre message.');
             return $this->redirectToRoute('contact');

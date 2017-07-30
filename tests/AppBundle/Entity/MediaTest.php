@@ -5,8 +5,9 @@ namespace tests\AppBundle\Entity;
 use AppBundle\Entity\Media;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Vote;
+use PHPUnit\Framework\TestCase;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends TestCase
 {
     public function testGetNewAverageAfterVoteIfMediaHasVotes()
     {

@@ -54,6 +54,9 @@ doctrine:
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
+        options:
+            # PDO::MYSQL_ATTR_INIT_COMMAND
+            1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

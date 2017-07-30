@@ -130,7 +130,7 @@ class DefaultController extends Controller
         $form = $this->createForm(VoteType::class, $vote);
         $form->handleRequest($request);
 
-        if ($form->isValid())
+        if ($form->isSubmitted() && $form->isValid())
         {
             /*$em = $this->getDoctrine()->getManager();
             $media = $vote->getMedia();

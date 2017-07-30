@@ -5,10 +5,11 @@ namespace tests\AppBundle\Entity\Manager;
 use AppBundle\Entity\Contact;
 use AppBundle\Entity\Manager\ContactManager;
 use AppBundle\Service\MailerService;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class ContactManagerTest extends \PHPUnit_Framework_TestCase
+class ContactManagerTest extends TestCase
 {
     /**
      * @var \Swift_Mailer
@@ -52,14 +53,14 @@ class ContactManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $transport = $this->getMock(\Swift_Transport::class);
-        $this->mailer = $this->getMock(\Swift_Mailer::class, [], [$transport]);
-        $this->templating = $this->getMock(\Twig_Environment::class, ['render'], [], '', false);
-        $this->translator = $this->getMock(Translator::class, ['trans'], [], '', false);
+        $transport = $this->createMock(\Swift_Transport::class);
+        $this->mailer = $this->createMock(\Swift_Mailer::class, [], [$transport]);
+        $this->templating = $this->createMock(\Twig_Environment::class, ['render'], [], '', false);
+        $this->translator = $this->createMock(Translator::class, ['trans'], [], '', false);
         $this->template = 'Bundle:Controller:Method';
         $this->from = 'from@test.fr';
         $this->to = 'to@test.fr';
-        $this->mailerService = $this->getMock(MailerService::class, ['sendMail'], [$this->mailer]);
+        $this->mailerService = $this->createMock(MailerService::class, ['sendMail'], [$this->mailer]);
         $this->contactManager = new ContactManager($this->mailerService, $this->templating, $this->translator, $this->template, $this->from, $this->to);
     }
 

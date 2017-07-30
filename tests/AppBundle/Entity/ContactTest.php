@@ -25,7 +25,7 @@ class ContactTest extends TypeTestCase
 
         $contact = $this->fromArray($contact, $formData);
 
-        $constraintViolationBuilder = $this->getMock(ConstraintViolationBuilderInterface::class);
+        $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $constraintViolationBuilder
             ->expects($this->once())
             ->method('atPath')
@@ -36,7 +36,7 @@ class ContactTest extends TypeTestCase
             ->expects($this->once())
             ->method('addViolation');
 
-        $executionContext = $this->getMock(ExecutionContextInterface::class);
+        $executionContext = $this->createMock(ExecutionContextInterface::class);
         $executionContext
             ->expects($this->once())
             ->method('buildViolation')
@@ -62,7 +62,7 @@ class ContactTest extends TypeTestCase
 
         $contact = $this->fromArray($contact, $formData);
 
-        $constraintViolationBuilder = $this->getMock(ConstraintViolationBuilderInterface::class);
+        $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $constraintViolationBuilder
             ->expects($this->never())
             ->method('atPath')
@@ -73,7 +73,7 @@ class ContactTest extends TypeTestCase
             ->expects($this->never())
             ->method('addViolation');
 
-        $executionContext = $this->getMock(ExecutionContextInterface::class);
+        $executionContext = $this->createMock(ExecutionContextInterface::class);
         $executionContext
             ->expects($this->never())
             ->method('buildViolation')

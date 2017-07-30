@@ -7,10 +7,11 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\Vote;
 use AppBundle\Repository\VoteRepository;
 use AppBundle\Entity\Manager\VoteManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class VoteManagerTest extends \PHPUnit_Framework_TestCase
+class VoteManagerTest extends TestCase
 {
     protected $repository;
     protected $token;
@@ -19,10 +20,25 @@ class VoteManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->token = $this->getMock(TokenInterface::class);
-        $this->tokenStorage = $this->getMock(TokenStorageInterface::class);
-        $this->repository = $this->getMock(VoteRepository::class, ['save'], [], "", false);
-        $this->voteManager = $this->getMock(VoteManager::class, ['save'], [$this->repository, $this->tokenStorage]);
+        $this->token = $this->createMock(TokenInterface::class);
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+
+        //        $this->getMock(
+//            $originalClassName,
+//            $methods = array(),
+//            array $arguments = array(),
+//                $mockClassName = '',
+//                $callOriginalConstructor = TRUE,
+//                $callOriginalClone = TRUE,
+//                $callAutoload = TRUE
+//            );
+
+        $this->repository = $this->getMockBuilder(VoteRepository::class)
+                                      ->setMethods(['save'])
+                                      ->disableOriginalConstructor()
+                                      ->getMock();
+
+        $this->voteManager = new VoteManager($this->repository, $this->tokenStorage);
     }
 
     public function testGetNewVote()
@@ -69,7 +85,7 @@ class VoteManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveVote()
     {
-        $media = $this->getMock(Media::class);
+        $media = $this->createMock(Media::class);
         $vote = new Vote();
         $vote->setMedia($media);
 

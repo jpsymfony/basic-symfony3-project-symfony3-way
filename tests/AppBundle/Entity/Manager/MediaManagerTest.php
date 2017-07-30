@@ -6,22 +6,37 @@ use AppBundle\Entity\Media;
 use AppBundle\Entity\User;
 use AppBundle\Repository\MediaRepository;
 use AppBundle\Entity\Manager\MediaManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class MediaManagerTest extends \PHPUnit_Framework_TestCase
+class MediaManagerTest extends TestCase
 {
-    protected $repository;
+    protected $mediaRepository;
     protected $token;
     protected $tokenStorage;
     protected $mediaManager;
 
     public function setUp()
     {
-        $this->token = $this->getMock(TokenInterface::class);
-        $this->tokenStorage = $this->getMock(TokenStorageInterface::class);
-        $this->repository = $this->getMock(MediaRepository::class, ['getNewMediaForUser', 'getRandomMedia', 'getHydratedMediaById', 'save'], [], "", false);
-        $this->mediaManager = $this->getMock(MediaManager::class, ['save'], [$this->repository, $this->tokenStorage]);
+        $this->token = $this->createMock(TokenInterface::class);
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+//        $this->getMock(
+//            $originalClassName,
+//            $methods = array(),
+//            array $arguments = array(),
+//                $mockClassName = '',
+//                $callOriginalConstructor = TRUE,
+//                $callOriginalClone = TRUE,
+//                $callAutoload = TRUE
+//            );
+
+        $this->mediaRepository = $this->getMockBuilder(MediaRepository::class)
+                                 ->setMethods(['getNewMediaForUser', 'getRandomMedia', 'getHydratedMediaById', 'save'])
+                                 ->disableOriginalConstructor()
+                                 ->getMock();
+
+        $this->mediaManager = new MediaManager($this->mediaRepository, $this->tokenStorage);
     }
 
     public function testGetNextMedia()
@@ -39,12 +54,12 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->willReturn($this->token);
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getNewMediaForUser')
             ->willReturn($media);
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->never())
             ->method('getRandomMedia');
 
@@ -66,12 +81,12 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->willReturn($this->token);
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getNewMediaForUser')
             ->willReturn(null);
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getRandomMedia')
             ->willReturn($media);
@@ -93,11 +108,11 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->willReturn($this->token);
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->never())
             ->method('getNewMediaForUser');
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getRandomMedia')
             ->willReturn($media);
@@ -109,7 +124,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
     {
         $media = new Media();
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getHydratedMediaById')
             ->with(123456)
@@ -120,7 +135,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaWillReturnNull()
     {
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('getHydratedMediaById')
             ->with(123456)
@@ -133,7 +148,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
     {
         $media = new Media();
 
-        $this->repository
+        $this->mediaRepository
             ->expects($this->once())
             ->method('save')
             ->with($media);

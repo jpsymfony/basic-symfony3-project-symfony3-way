@@ -1,7 +1,33 @@
 services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: true
+
+    # makes classes in src/AppBundle available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../src/AppBundle/{Entity,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    AppBundle\Controller\:
+        resource: '../../src/AppBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
     app.media_manager:
         class: AppBundle\Entity\Manager\MediaManager
         arguments: ["@app.media_repository", "@security.token_storage"]
+        public: true
 
     app.vote_manager:
         class: AppBundle\Entity\Manager\VoteManager
@@ -14,4 +40,11 @@ services:
 
     app.contact.manager:
         class: AppBundle\Entity\Manager\ContactManager
-        arguments: ['@app.mailer_service', '@twig', '@translator','mail/contact_mail.html.twig', '%email_from%', '%mailer_user%']
+        arguments:
+            - '@app.mailer_service'
+            - '@twig'
+            - '@translator'
+            - 'mail/contact_mail.html.twig'
+            - '%email_from%'
+            - '%mailer_user%'
+        public: true
