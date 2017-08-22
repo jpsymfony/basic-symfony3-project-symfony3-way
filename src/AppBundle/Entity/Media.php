@@ -204,6 +204,11 @@ class Media
         return (null === $this->average) ? '-' : sprintf('%.1f', $this->average);
     }
 
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
     public function hasUserAlreadyVoted(User $user)
     {
         foreach ($this->votes as $vote) {

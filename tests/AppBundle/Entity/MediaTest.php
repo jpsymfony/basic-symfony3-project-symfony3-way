@@ -41,8 +41,8 @@ class MediaTest extends TestCase
     }
 
     /**
-     * @param $actual
-     * @param $expected
+     * @param int|null $actual
+     * @param string $expected
      * @dataProvider getDisplayedAverageProvider
      */
     public function testGetDisplayedAverage($actual, $expected)

@@ -23,7 +23,7 @@ class ContactManager
     protected $translator;
 
     /**
-     * @var array
+     * @var string
      */
     protected $template;
 
@@ -47,9 +47,9 @@ class ContactManager
      * @param MailerService $mailerService
      * @param \Twig_Environment $templating
      * @param TranslatorInterface $translator
-     * @param $template
-     * @param $from
-     * @param $to
+     * @param string $template
+     * @param string $from
+     * @param string $to
      */
     public function __construct
     (

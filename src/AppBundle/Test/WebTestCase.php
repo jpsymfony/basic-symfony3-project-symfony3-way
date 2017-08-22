@@ -20,7 +20,7 @@ class WebTestCase extends BaseWebTestCase
         $app->run(new ArrayInput([
             'command' => 'doctrine:database:drop',
             '--force' => true,
-            '--quiet'          => true,
+            '--quiet' => true,
         ]));
 
         // See http://stackoverflow.com/questions/7134469/doctrine-2-close-connection
@@ -28,7 +28,7 @@ class WebTestCase extends BaseWebTestCase
 
         $app->run(new ArrayInput([
             'command' => 'doctrine:database:create',
-            '--quiet'          => true,
+            '--quiet' => true,
         ]));
 
         $app->run(new ArrayInput([

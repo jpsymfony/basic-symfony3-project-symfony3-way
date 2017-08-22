@@ -59,6 +59,8 @@ class VoteManagerTest extends TestCase
             ->method('getToken')
             ->willReturn($this->token);
 
+        $result = $this->voteManager->getNewVote($media);
+
         $this->assertEquals($vote, $this->voteManager->getNewVote($media));
     }
 
