@@ -5,6 +5,7 @@ namespace tests\AppBundle\Form\Type;
 use AppBundle\Test\TypeTestCase;
 use AppBundle\Entity\Contact;
 use AppBundle\Form\Type\ContactType;
+use Symfony\Component\Validator\Tests\Constraints\CallbackValidatorTest_Object;
 
 class ContactTypeTest extends TypeTestCase
 {
@@ -23,13 +24,13 @@ class ContactTypeTest extends TypeTestCase
         $form = $this->factory->create(ContactType::class);
 
         $contact = new Contact();
-        $object = $this->fromArray($contact, $formData);
+        $this->fromArray($contact, $formData);
 
         // submit the data to the form directly
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($object, $form->getData());
+        $this->assertEquals($contact, $form->getData());
 
         $view = $form->createView();
         $children = $view->children;
@@ -39,6 +40,6 @@ class ContactTypeTest extends TypeTestCase
         }
 
         $validationError = $form->getErrors();
-        $this->assertEquals($validationError->count(), 0);
+        $this->assertEquals(0, $validationError->count());
     }
 }

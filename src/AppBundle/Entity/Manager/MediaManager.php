@@ -29,6 +29,8 @@ class MediaManager
      * Get the next media to display depending on the user
      *
      * @return Media|null
+     *
+     * @throws \Exception
      */
     public function getNextMedia()
     {
@@ -40,6 +42,9 @@ class MediaManager
             if ($media instanceof Media) {
                 return $media;
             }
+
+            throw new \Exception('L\'objet n\'est pas de type Media');
+
         }
 
 

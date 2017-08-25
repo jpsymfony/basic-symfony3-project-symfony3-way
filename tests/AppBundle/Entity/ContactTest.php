@@ -23,7 +23,7 @@ class ContactTest extends TypeTestCase
             'other' => null,
         ];
 
-        $contact = $this->fromArray($contact, $formData);
+        $this->fromArray($contact, $formData);
 
         $constraintViolationBuilder = $this->createMock(ConstraintViolationBuilderInterface::class);
         $constraintViolationBuilder

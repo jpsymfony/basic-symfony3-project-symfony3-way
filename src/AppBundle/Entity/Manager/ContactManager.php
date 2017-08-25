@@ -8,11 +8,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ContactManager
 {
     /**
-     * @var \Swift_Mailer
-     */
-    protected $mailer;
-
-    /**
      * @var \Twig_Environment
      */
     protected $templating;

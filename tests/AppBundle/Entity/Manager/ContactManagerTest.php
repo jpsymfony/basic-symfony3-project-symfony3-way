@@ -12,11 +12,6 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ContactManagerTest extends TestCase
 {
     /**
-     * @var \Swift_Mailer
-     */
-    protected $mailer;
-
-    /**
      * @var \Twig_Environment
      */
     protected $templating;
@@ -53,15 +48,39 @@ class ContactManagerTest extends TestCase
 
     public function setUp()
     {
-        $transport = $this->createMock(\Swift_Transport::class);
-        $this->mailer = $this->createMock(\Swift_Mailer::class, [], [$transport]);
-        $this->templating = $this->createMock(\Twig_Environment::class, ['render'], [], '', false);
-        $this->translator = $this->createMock(Translator::class, ['trans'], [], '', false);
+//        $transport = $this->createMock(\Swift_Transport::class);
+//
+//        $this->mailer = $this->getMockBuilder(\Swift_Mailer::class)
+//                             ->setConstructorArgs([$transport])
+//                             ->getMock();
+
+        $this->templating = $this->getMockBuilder(\Twig_Environment::class)
+                                 ->setMethods(['render'])
+                                 ->disableOriginalConstructor()
+                                 ->getMock();
+
+        $this->translator = $this->getMockBuilder(Translator::class)
+                                 ->setMethods(['trans'])
+                                 ->disableOriginalConstructor()
+                                 ->getMock();
+
         $this->template = 'Bundle:Controller:Method';
-        $this->from = 'from@test.fr';
-        $this->to = 'to@test.fr';
-        $this->mailerService = $this->createMock(MailerService::class, ['sendMail'], [$this->mailer]);
-        $this->contactManager = new ContactManager($this->mailerService, $this->templating, $this->translator, $this->template, $this->from, $this->to);
+        $this->from     = 'from@test.fr';
+        $this->to       = 'to@test.fr';
+
+        $this->mailerService = $this->getMockBuilder(MailerService::class)
+                                    ->setMethods(['sendMail'])
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
+
+        $this->contactManager = new ContactManager(
+            $this->mailerService,
+            $this->templating,
+            $this->translator,
+            $this->template,
+            $this->from,
+            $this->to
+        );
     }
 
     public function testSendMail()
@@ -75,16 +94,16 @@ class ContactManagerTest extends TestCase
         $contact->setKnowledge('pub_papier');
 
         $this->translator
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('trans')
-            ->with('message_subject', ['%name%' => $contact->getFirstName() . ' ' . $contact->getLastName()], 'contact')
+            ->with('message_subject', ['%name%' => $contact->getFirstName().' '.$contact->getLastName()], 'contact')
             ->willReturn('some translation');
 
         $this->templating
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('render')
             ->with($this->template, ['contact' => $contact])
-            ->willReturn('The rendered template');
+            ->willReturn('the rendered template');
 
         $this->mailerService
             ->expects($this->once())
@@ -92,9 +111,9 @@ class ContactManagerTest extends TestCase
             ->with(
                 $this->from,
                 $this->to,
-                $this->translator->trans('message_subject', ['%name%' => $contact->getFirstName() . ' ' . $contact->getLastName()], 'contact'),
-                $this->templating->render($this->template, ['contact' => $contact])
-                );
+                'some translation',
+                'the rendered template'
+            );
 
         $this->contactManager->sendMail($contact);
     }

@@ -35,7 +35,7 @@ class MediaRepositoryTest extends WebTestCase
             $this->assertNotNull($media);
             $this->assertEquals('image ' . $i, $media->getTitle());
             $this->assertNotNull($media->getUrl());
-            $this->assertNotNull($i, $media->getAverage());
+            $this->assertNotNull($media->getAverage());
             $this->assertEquals(2, count($media->getVotes()));
             $this->assertInstanceOf(Media::class, $media);
         }
@@ -105,11 +105,11 @@ class MediaRepositoryTest extends WebTestCase
         $user1 = $this->em->getRepository(User::class)->find(1);
         $user2 = $this->em->getRepository(User::class)->find(2);
 
-        $resultsUser1 = $this->em->getRepository(Media::class)->getNewMediaForUser($user1);
-        $resultsUser2 = $this->em->getRepository(Media::class)->getNewMediaForUser($user2);
+        $resultUser1 = $this->em->getRepository(Media::class)->getNewMediaForUser($user1);
+        $resultUser2 = $this->em->getRepository(Media::class)->getNewMediaForUser($user2);
 
-        $this->assertNull($resultsUser1);
-        $this->assertNotNull($resultsUser2);
-        $this->assertInstanceOf(Media::class, $resultsUser2);
+        $this->assertNull($resultUser1);
+        $this->assertNotNull($resultUser2);
+        $this->assertInstanceOf(Media::class, $resultUser2);
     }
 }
