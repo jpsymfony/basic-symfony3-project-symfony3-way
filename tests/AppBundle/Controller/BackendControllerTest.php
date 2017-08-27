@@ -5,7 +5,10 @@ namespace tests\AppBundle\Controller;
 // http://symfony.com/doc/current/book/testing.html for further details
 use AppBundle\Test\WebTestCase;
 use AppBundle\Entity\Media;
+use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BackendControllerTest extends WebTestCase
 {
@@ -13,6 +16,8 @@ class BackendControllerTest extends WebTestCase
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
+
+    private $client = null;
 
     /**
      * {@inheritDoc}
@@ -24,15 +29,17 @@ class BackendControllerTest extends WebTestCase
         $this->em = static::$kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $this->client = static::createClient();
     }
 
     public function testNewMediaForm()
     {
         $this->loadFixtures(self::$kernel);
-        $client = static::createClient(array(), array(
+        $client = static::createClient([], [
             'PHP_AUTH_USER' => 'admin',
             'PHP_AUTH_PW'   => 'password',
-        ));
+        ]);
         $client->followRedirects();
         $client->enableProfiler();
 
@@ -41,9 +48,16 @@ class BackendControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/admin');
 
+        $this->assertEquals(
+            Response::HTTP_OK,
+            $client->getResponse()->getStatusCode()
+        );
+
         $form = $crawler->selectButton('Valider')->form();
-        $form['media[title]'] = 'trop trognon ce chaton';
-        $form['media[url]'] = 'http://exh5266.cias.rit.edu/256/homework3/images/kitten.jpg';
+        $form->setValues([
+            'media[title]' => 'trop trognon ce chaton',
+            'media[url]'    => 'http://exh5266.cias.rit.edu/256/homework3/images/kitten.jpg',
+        ]);
 
         $crawler = $client->submit($form);
 
@@ -60,12 +74,6 @@ class BackendControllerTest extends WebTestCase
 
         // Check that the profiler is enabled
         if ($profile = $client->getProfile()) {
-            // check the number of requests
-            $this->assertEquals(
-                0,
-                $profile->getCollector('db')->getQueryCount()
-            );
-
             // check the time spent in the framework
             $this->assertLessThan(
                 600,

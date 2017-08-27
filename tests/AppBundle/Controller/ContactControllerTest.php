@@ -85,6 +85,15 @@ class ContactControllerTest extends WebTestCase
                 $profile->getCollector('db')->getQueryCount()
             );
 
+          /*  $this->assertGreaterThan(
+                0,
+                $profile->getCollector('db')->getQueryCount(),
+                sprintf(
+                    'Checks that query count is less than 30 (token %s)',
+                    $profile->getToken()
+                )
+            );*/
+
             // check the time spent in the framework
             $this->assertLessThan(
                 600,
