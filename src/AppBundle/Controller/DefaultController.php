@@ -146,13 +146,13 @@ class DefaultController extends Controller
 
         $this->get('session')->getFlashBag()->add('error', 'Une erreur est survenue');
 
-        return $this->forward('AppBundle:Default:showMedia', ['id' => $media->getId()]);
+        return $this->redirectToRoute('show_media', ['id' => $media->getId()]);
     }
 
     /**
      * @return MediaManager
      */
-    public function getMediaManager()
+    private function getMediaManager()
     {
         return $this->get('app.media_manager');
     }
@@ -160,7 +160,7 @@ class DefaultController extends Controller
     /**
      * @return VoteManager
      */
-    public function getVoteManager()
+    private function getVoteManager()
     {
         return $this->get('app.vote_manager');
     }

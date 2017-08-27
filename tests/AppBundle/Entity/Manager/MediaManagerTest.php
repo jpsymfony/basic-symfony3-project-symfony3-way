@@ -66,7 +66,7 @@ class MediaManagerTest extends TestCase
         $this->assertEquals($media, $this->mediaManager->getNextMedia());
     }
 
-    public function testGetNextMediaWillThrowExceptionIfObjectNotInstanceOfMedia()
+    /*public function testGetNextMediaWillThrowExceptionIfObjectNotInstanceOfMedia()
     {
         $user = new User();
         $media = new Media();
@@ -94,9 +94,9 @@ class MediaManagerTest extends TestCase
         $this->expectExceptionMessage('L\'objet n\'est pas de type Media');
 
         $this->assertEquals($media, $this->mediaManager->getNextMedia());
-    }
+    }*/
 
-    /*public function testGetNextMediaWillReturnGetRandomMediaRepositoryMethodIfNoMediaReturnedByGetNewMediaForUserMethod()
+    public function testGetNextMediaWillReturnGetRandomMediaRepositoryMethodIfNoMediaReturnedByGetNewMediaForUserMethod()
     {
         $user = new User();
         $media = new Media();
@@ -122,7 +122,7 @@ class MediaManagerTest extends TestCase
             ->willReturn($media);
 
         $this->assertEquals($media, $this->mediaManager->getNextMedia());
-    }*/
+    }
 
     public function testGetNextMediaWillReturnGetRandomMediaRepositoryMethodIfNoConnectedUser()
     {

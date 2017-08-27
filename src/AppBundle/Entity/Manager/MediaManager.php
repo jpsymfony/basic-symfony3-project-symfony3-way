@@ -42,11 +42,7 @@ class MediaManager
             if ($media instanceof Media) {
                 return $media;
             }
-
-            throw new \Exception('L\'objet n\'est pas de type Media');
-
         }
-
 
         return $this->mediaRepository->getRandomMedia();
     }
